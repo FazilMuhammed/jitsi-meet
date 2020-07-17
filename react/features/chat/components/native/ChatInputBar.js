@@ -1,15 +1,14 @@
 // @flow
 
-import React, { Component } from 'react';
-import { Platform, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { Component } from "react";
+import { Platform, TextInput, TouchableOpacity, View } from "react-native";
 
-import { translate } from '../../../base/i18n';
-import { Icon, IconChatSend } from '../../../base/icons';
+import { translate } from "../../../base/i18n";
+import { Icon, IconChatSend } from "../../../base/icons";
 
-import styles from './styles';
+import styles from "./styles";
 
 type Props = {
-
     /**
      * Callback to invoke on message send.
      */
@@ -18,11 +17,10 @@ type Props = {
     /**
      * Function to be used to translate i18n labels.
      */
-    t: Function
+    t: Function,
 };
 
 type State = {
-
     /**
      * Boolean to show if an extra padding needs to be added to the bar.
      */
@@ -36,7 +34,7 @@ type State = {
     /**
      * Boolean to show or hide the send button.
      */
-    showSend: boolean
+    showSend: boolean,
 };
 
 /**
@@ -53,12 +51,14 @@ class ChatInputBar extends Component<Props, State> {
 
         this.state = {
             addPadding: false,
-            message: '',
-            showSend: false
+            message: "",
+            showSend: false,
         };
 
         this._onChangeText = this._onChangeText.bind(this);
-        this._onFieldReferenceAvailable = this._onFieldReferenceAvailable.bind(this);
+        this._onFieldReferenceAvailable = this._onFieldReferenceAvailable.bind(
+            this
+        );
         this._onFocused = this._onFocused.bind(this);
         this._onSubmit = this._onSubmit.bind(this);
     }
@@ -71,34 +71,37 @@ class ChatInputBar extends Component<Props, State> {
     render() {
         return (
             <View
-                style = { [
+                style={[
                     styles.inputBar,
-                    this.state.addPadding ? styles.extraBarPadding : null
-                ] }>
+                    this.state.addPadding ? styles.extraBarPadding : null,
+                ]}
+            >
                 <TextInput
-                    blurOnSubmit = { false }
-                    multiline = { false }
-                    onBlur = { this._onFocused(false) }
-                    onChangeText = { this._onChangeText }
-                    onFocus = { this._onFocused(true) }
-                    onSubmitEditing = { this._onSubmit }
-                    placeholder = { this.props.t('chat.fieldPlaceHolder') }
-                    ref = { this._onFieldReferenceAvailable }
-                    returnKeyType = 'send'
-                    style = { styles.inputField }
-                    value = { this.state.message } />
-                {
-                    this.state.showSend && <TouchableOpacity onPress = { this._onSubmit }>
+                    blurOnSubmit={false}
+                    multiline={false}
+                    onBlur={this._onFocused(false)}
+                    onChangeText={this._onChangeText}
+                    onFocus={this._onFocused(true)}
+                    onSubmitEditing={this._onSubmit}
+                    placeholder={this.props.t("chat.fieldPlaceHolder")}
+                    ref={this._onFieldReferenceAvailable}
+                    returnKeyType="send"
+                    style={styles.inputField}
+                    value={this.state.message}
+                />
+                {this.state.showSend && (
+                    <TouchableOpacity onPress={this._onSubmit}>
                         <Icon
-                            src = { IconChatSend }
-                            style = { styles.sendButtonIcon } />
+                            src={IconChatSend}
+                            style={styles.sendButtonIcon}
+                        />
                     </TouchableOpacity>
-                }
+                )}
             </View>
         );
     }
 
-    _onChangeText: string => void;
+    _onChangeText: (string) => void;
 
     /**
      * Callback to handle the change of the value of the text field.
@@ -109,11 +112,11 @@ class ChatInputBar extends Component<Props, State> {
     _onChangeText(text) {
         this.setState({
             message: text,
-            showSend: Boolean(text)
+            showSend: Boolean(text),
         });
     }
 
-    _onFieldReferenceAvailable: Object => void;
+    _onFieldReferenceAvailable: (Object) => void;
 
     /**
      * Callback to be invoked when the field reference is available.
@@ -125,7 +128,7 @@ class ChatInputBar extends Component<Props, State> {
         field && field.focus();
     }
 
-    _onFocused: boolean => Function;
+    _onFocused: (boolean) => Function;
 
     /**
      * Constructs a callback to be used to update the padding of the field if necessary.
@@ -135,9 +138,10 @@ class ChatInputBar extends Component<Props, State> {
      */
     _onFocused(focused) {
         return () => {
-            Platform.OS === 'android' && this.setState({
-                addPadding: focused
-            });
+            Platform.OS === "android" &&
+                this.setState({
+                    addPadding: focused,
+                });
         };
     }
 
@@ -153,8 +157,8 @@ class ChatInputBar extends Component<Props, State> {
 
         message && this.props.onSend(message);
         this.setState({
-            message: '',
-            showSend: false
+            message: "",
+            showSend: false,
         });
     }
 }

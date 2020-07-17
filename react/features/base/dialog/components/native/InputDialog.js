@@ -1,23 +1,22 @@
 // @flow
 
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import React from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 
-import { translate } from '../../../i18n';
-import { connect } from '../../../redux';
-import { StyleType } from '../../../styles';
-import { _abstractMapStateToProps } from '../../functions';
-import { type State as AbstractState } from '../AbstractDialog';
+import { translate } from "../../../i18n";
+import { connect } from "../../../redux";
+import { StyleType } from "../../../styles";
+import { _abstractMapStateToProps } from "../../functions";
+import { type State as AbstractState } from "../AbstractDialog";
 
-import BaseDialog, { type Props as BaseProps } from './BaseDialog';
+import BaseDialog, { type Props as BaseProps } from "./BaseDialog";
 import {
     FIELD_UNDERLINE,
     brandedDialog,
-    inputDialog as styles
-} from './styles';
+    inputDialog as styles,
+} from "./styles";
 
 type Props = BaseProps & {
-
     /**
      * The color-schemed stylesheet of the feature.
      */
@@ -45,8 +44,8 @@ type Props = BaseProps & {
     /**
      * Validating of the input.
      */
-    validateInput: ?Function
-}
+    validateInput: ?Function,
+};
 
 type State = {
     ...AbstractState,
@@ -54,7 +53,7 @@ type State = {
     /**
      * The current value of the field.
      */
-    fieldValue: ?string
+    fieldValue: ?string,
 };
 
 /**
@@ -70,7 +69,7 @@ class InputDialog extends BaseDialog<Props, State> {
         super(props);
 
         this.state = {
-            fieldValue: props.initialValue
+            fieldValue: props.initialValue,
         };
 
         this._onChangeText = this._onChangeText.bind(this);
@@ -87,39 +86,35 @@ class InputDialog extends BaseDialog<Props, State> {
 
         return (
             <View>
-                <View
-                    style = { [
-                        brandedDialog.mainWrapper,
-                        styles.fieldWrapper
-                    ] }>
-                    <Text style = { _dialogStyles.fieldLabel }>
-                        { t(this.props.contentKey) }
+                <View style={[brandedDialog.mainWrapper, styles.fieldWrapper]}>
+                    <Text style={_dialogStyles.fieldLabel}>
+                        {t(this.props.contentKey)}
                     </Text>
                     <TextInput
-                        onChangeText = { this._onChangeText }
-                        style = { _dialogStyles.field }
-                        underlineColorAndroid = { FIELD_UNDERLINE }
-                        value = { this.state.fieldValue }
-                        { ...this.props.textInputProps } />
-                    { messageKey && (<Text
-                        style = { [
-                            styles.formMessage,
-                            _dialogStyles.text
-                        ] }>
-                        { t(messageKey) }
-                    </Text>) }
+                        onChangeText={this._onChangeText}
+                        style={_dialogStyles.field}
+                        underlineColorAndroid={FIELD_UNDERLINE}
+                        value={this.state.fieldValue}
+                        {...this.props.textInputProps}
+                    />
+                    {messageKey && (
+                        <Text style={[styles.formMessage, _dialogStyles.text]}>
+                            {t(messageKey)}
+                        </Text>
+                    )}
                 </View>
-                <View style = { brandedDialog.buttonWrapper }>
+                <View style={brandedDialog.buttonWrapper}>
                     <TouchableOpacity
-                        disabled = { okDisabled }
-                        onPress = { this._onSubmitValue }
-                        style = { [
+                        disabled={okDisabled}
+                        onPress={this._onSubmitValue}
+                        style={[
                             _dialogStyles.button,
                             brandedDialog.buttonFarLeft,
-                            brandedDialog.buttonFarRight
-                        ] }>
-                        <Text style = { _dialogStyles.buttonLabel }>
-                            { t('dialog.Ok') }
+                            brandedDialog.buttonFarRight,
+                        ]}
+                    >
+                        <Text style={_dialogStyles.buttonLabel}>
+                            {t("dialog.Ok")}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -129,7 +124,7 @@ class InputDialog extends BaseDialog<Props, State> {
 
     _onCancel: () => void;
 
-    _onChangeText: string => void;
+    _onChangeText: (string) => void;
 
     /**
      * Callback to be invoked when the text in the field changes.
@@ -138,14 +133,12 @@ class InputDialog extends BaseDialog<Props, State> {
      * @returns {void}
      */
     _onChangeText(fieldValue) {
-
-        if (this.props.validateInput
-                && !this.props.validateInput(fieldValue)) {
+        if (this.props.validateInput && !this.props.validateInput(fieldValue)) {
             return;
         }
 
         this.setState({
-            fieldValue
+            fieldValue,
         });
     }
 

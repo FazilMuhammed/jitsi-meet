@@ -1,33 +1,32 @@
 /* @flow */
 
-import React, { Component } from 'react';
-import { Text, TextInput, View } from 'react-native';
-import { connect as reduxConnect } from 'react-redux';
-import type { Dispatch } from 'redux';
+import React, { Component } from "react";
+import { Text, TextInput, View } from "react-native";
+import { connect as reduxConnect } from "react-redux";
+import type { Dispatch } from "redux";
 
-import { ColorSchemeRegistry } from '../../base/color-scheme';
-import { toJid } from '../../base/connection';
-import { connect } from '../../base/connection/actions.native';
+import { ColorSchemeRegistry } from "../../base/color-scheme";
+import { toJid } from "../../base/connection";
+import { connect } from "../../base/connection/actions.native";
 import {
     CustomSubmitDialog,
     FIELD_UNDERLINE,
     PLACEHOLDER_COLOR,
     _abstractMapStateToProps,
-    inputDialog as inputDialogStyle
-} from '../../base/dialog';
-import { translate } from '../../base/i18n';
-import { JitsiConnectionErrors } from '../../base/lib-jitsi-meet';
-import type { StyleType } from '../../base/styles';
-import { authenticateAndUpgradeRole, cancelLogin } from '../actions';
+    inputDialog as inputDialogStyle,
+} from "../../base/dialog";
+import { translate } from "../../base/i18n";
+import { JitsiConnectionErrors } from "../../base/lib-jitsi-meet";
+import type { StyleType } from "../../base/styles";
+import { authenticateAndUpgradeRole, cancelLogin } from "../actions";
 
 // Register styles.
-import './styles';
+import "./styles";
 
 /**
  * The type of the React {@link Component} props of {@link LoginDialog}.
  */
 type Props = {
-
     /**
      * {@link JitsiConference} that needs authentication - will hold a valid
      * value in XMPP login + guest access mode.
@@ -73,14 +72,13 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
 };
 
 /**
  * The type of the React {@link Component} state of {@link LoginDialog}.
  */
 type State = {
-
     /**
      * The user entered password for the conference.
      */
@@ -89,7 +87,7 @@ type State = {
     /**
      * The user entered local participant name.
      */
-    username: string
+    username: string,
 };
 
 /**
@@ -130,8 +128,8 @@ class LoginDialog extends Component<Props, State> {
         super(props);
 
         this.state = {
-            username: '',
-            password: ''
+            username: "",
+            password: "",
         };
 
         // Bind event handlers so they are only bound once per instance.
@@ -152,36 +150,39 @@ class LoginDialog extends Component<Props, State> {
             _connecting: connecting,
             _dialogStyles,
             _styles: styles,
-            t
+            t,
         } = this.props;
 
         return (
             <CustomSubmitDialog
-                okDisabled = { connecting }
-                onCancel = { this._onCancel }
-                onSubmit = { this._onLogin }>
-                <View style = { styles.loginDialog }>
+                okDisabled={connecting}
+                onCancel={this._onCancel}
+                onSubmit={this._onLogin}
+            >
+                <View style={styles.loginDialog}>
                     <TextInput
-                        autoCapitalize = { 'none' }
-                        autoCorrect = { false }
-                        onChangeText = { this._onUsernameChange }
-                        placeholder = { 'user@domain.com' }
-                        placeholderTextColor = { PLACEHOLDER_COLOR }
-                        style = { _dialogStyles.field }
-                        underlineColorAndroid = { FIELD_UNDERLINE }
-                        value = { this.state.username } />
+                        autoCapitalize={"none"}
+                        autoCorrect={false}
+                        onChangeText={this._onUsernameChange}
+                        placeholder={"user@domain.com"}
+                        placeholderTextColor={PLACEHOLDER_COLOR}
+                        style={_dialogStyles.field}
+                        underlineColorAndroid={FIELD_UNDERLINE}
+                        value={this.state.username}
+                    />
                     <TextInput
-                        onChangeText = { this._onPasswordChange }
-                        placeholder = { t('dialog.userPassword') }
-                        placeholderTextColor = { PLACEHOLDER_COLOR }
-                        secureTextEntry = { true }
-                        style = { [
+                        onChangeText={this._onPasswordChange}
+                        placeholder={t("dialog.userPassword")}
+                        placeholderTextColor={PLACEHOLDER_COLOR}
+                        secureTextEntry={true}
+                        style={[
                             _dialogStyles.field,
-                            inputDialogStyle.bottomField
-                        ] }
-                        underlineColorAndroid = { FIELD_UNDERLINE }
-                        value = { this.state.password } />
-                    { this._renderMessage() }
+                            inputDialogStyle.bottomField,
+                        ]}
+                        underlineColorAndroid={FIELD_UNDERLINE}
+                        value={this.state.password}
+                    />
+                    {this._renderMessage()}
                 </View>
             </CustomSubmitDialog>
         );
@@ -199,7 +200,7 @@ class LoginDialog extends Component<Props, State> {
             _error: error,
             _progress: progress,
             _styles: styles,
-            t
+            t,
         } = this.props;
 
         let messageKey;
@@ -207,7 +208,7 @@ class LoginDialog extends Component<Props, State> {
         const messageOptions = {};
 
         if (progress && progress < 1) {
-            messageKey = 'connection.FETCH_SESSION_ID';
+            messageKey = "connection.FETCH_SESSION_ID";
         } else if (error) {
             const { name } = error;
 
@@ -217,36 +218,32 @@ class LoginDialog extends Component<Props, State> {
                 // ones which the user sees.
                 const { credentials } = error;
 
-                if (credentials
-                        && credentials.jid
-                            === toJid(
-                                this.state.username,
-                                this.props._configHosts)
-                        && credentials.password === this.state.password) {
-                    messageKey = 'dialog.incorrectPassword';
+                if (
+                    credentials &&
+                    credentials.jid ===
+                        toJid(this.state.username, this.props._configHosts) &&
+                    credentials.password === this.state.password
+                ) {
+                    messageKey = "dialog.incorrectPassword";
                     messageIsError = true;
                 }
             } else if (name) {
-                messageKey = 'dialog.connectErrorWithMsg';
+                messageKey = "dialog.connectErrorWithMsg";
                 messageOptions.msg = `${name} ${error.message}`;
                 messageIsError = true;
             }
         } else if (connecting) {
-            messageKey = 'connection.CONNECTING';
+            messageKey = "connection.CONNECTING";
         }
 
         if (messageKey) {
             const message = t(messageKey, messageOptions);
             const messageStyles = [
                 styles.dialogText,
-                messageIsError ? styles.errorMessage : styles.progressMessage
+                messageIsError ? styles.errorMessage : styles.progressMessage,
             ];
 
-            return (
-                <Text style = { messageStyles }>
-                    { message }
-                </Text>
-            );
+            return <Text style={messageStyles}>{message}</Text>;
         }
 
         return null;
@@ -263,7 +260,7 @@ class LoginDialog extends Component<Props, State> {
      */
     _onUsernameChange(text) {
         this.setState({
-            username: text
+            username: text,
         });
     }
 
@@ -278,7 +275,7 @@ class LoginDialog extends Component<Props, State> {
      */
     _onPasswordChange(text) {
         this.setState({
-            password: text
+            password: text,
         });
     }
 
@@ -333,14 +330,13 @@ function _mapStateToProps(state) {
     const {
         error: authenticateAndUpgradeRoleError,
         progress,
-        thenableWithCancel
-    } = state['features/authentication'];
-    const { authRequired } = state['features/base/conference'];
-    const { hosts: configHosts } = state['features/base/config'];
-    const {
-        connecting,
-        error: connectionError
-    } = state['features/base/connection'];
+        thenableWithCancel,
+    } = state["features/authentication"];
+    const { authRequired } = state["features/base/conference"];
+    const { hosts: configHosts } = state["features/base/config"];
+    const { connecting, error: connectionError } = state[
+        "features/base/connection"
+    ];
 
     return {
         ..._abstractMapStateToProps(state),
@@ -349,7 +345,7 @@ function _mapStateToProps(state) {
         _connecting: Boolean(connecting) || Boolean(thenableWithCancel),
         _error: connectionError || authenticateAndUpgradeRoleError,
         _progress: progress,
-        _styles: ColorSchemeRegistry.get(state, 'LoginDialog')
+        _styles: ColorSchemeRegistry.get(state, "LoginDialog"),
     };
 }
 

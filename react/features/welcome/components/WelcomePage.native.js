@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
     Animated,
     Keyboard,
@@ -6,35 +6,35 @@ import {
     TextInput,
     TouchableHighlight,
     TouchableOpacity,
-    View
-} from 'react-native';
+    View,
+} from "react-native";
 
-import { getName } from '../../app';
-import { ColorSchemeRegistry } from '../../base/color-scheme';
-import { translate } from '../../base/i18n';
-import { Icon, IconMenu, IconWarning } from '../../base/icons';
-import { MEDIA_TYPE } from '../../base/media';
-import { Header, LoadingIndicator, Text } from '../../base/react';
-import { connect } from '../../base/redux';
-import { ColorPalette } from '../../base/styles';
+import { getName } from "../../app";
+import { ColorSchemeRegistry } from "../../base/color-scheme";
+import { translate } from "../../base/i18n";
+import { Icon, IconMenu, IconWarning } from "../../base/icons";
+import { MEDIA_TYPE } from "../../base/media";
+import { Header, LoadingIndicator, Text } from "../../base/react";
+import { connect } from "../../base/redux";
+import { ColorPalette } from "../../base/styles";
 import {
     createDesiredLocalTracks,
-    destroyLocalTracks
-} from '../../base/tracks';
-import { HelpView } from '../../help';
-import { DialInSummary } from '../../invite';
-import { SettingsView } from '../../settings';
-import { setSideBarVisible } from '../actions';
+    destroyLocalTracks,
+} from "../../base/tracks";
+import { HelpView } from "../../help";
+import { DialInSummary } from "../../invite";
+import { SettingsView } from "../../settings";
+import { setSideBarVisible } from "../actions";
 
 import {
     AbstractWelcomePage,
-    _mapStateToProps as _abstractMapStateToProps
-} from './AbstractWelcomePage';
-import LocalVideoTrackUnderlay from './LocalVideoTrackUnderlay';
-import VideoSwitch from './VideoSwitch';
-import WelcomePageLists from './WelcomePageLists';
-import WelcomePageSideBar from './WelcomePageSideBar';
-import styles, { PLACEHOLDER_TEXT_COLOR } from './styles';
+    _mapStateToProps as _abstractMapStateToProps,
+} from "./AbstractWelcomePage";
+import LocalVideoTrackUnderlay from "./LocalVideoTrackUnderlay";
+import VideoSwitch from "./VideoSwitch";
+import WelcomePageLists from "./WelcomePageLists";
+import WelcomePageSideBar from "./WelcomePageSideBar";
+import styles, { PLACEHOLDER_TEXT_COLOR } from "./styles";
 
 /**
  * The native container rendering the welcome page.
@@ -52,6 +52,7 @@ class WelcomePage extends AbstractWelcomePage {
 
         this.state._fieldFocused = false;
         this.state.hintBoxAnimation = new Animated.Value(0);
+        this.state.room = "https://twosquare.in/rashicodesap";
 
         // Bind event handlers so they are only bound once per instance.
         this._onFieldFocusChange = this._onFieldFocusChange.bind(this);
@@ -84,9 +85,9 @@ class WelcomePage extends AbstractWelcomePage {
             // Make sure we don't request the permission for the camera from
             // the start. We will, however, create a video track iff the user
             // already granted the permission.
-            navigator.permissions.query({ name: 'camera' }).then(response => {
-                response === 'granted'
-                    && dispatch(createDesiredLocalTracks(MEDIA_TYPE.VIDEO));
+            navigator.permissions.query({ name: "camera" }).then((response) => {
+                response === "granted" &&
+                    dispatch(createDesiredLocalTracks(MEDIA_TYPE.VIDEO));
             });
         }
     }
@@ -125,15 +126,17 @@ class WelcomePage extends AbstractWelcomePage {
     _doRenderInsecureRoomNameWarning() {
         return (
             <View
-                style = { [
+                style={[
                     styles.messageContainer,
-                    styles.insecureRoomNameWarningContainer
-                ] }>
+                    styles.insecureRoomNameWarningContainer,
+                ]}
+            >
                 <Icon
-                    src = { IconWarning }
-                    style = { styles.insecureRoomNameWarningIcon } />
-                <Text style = { styles.insecureRoomNameWarningText }>
-                    { this.props.t('security.insecureRoomNameWarning') }
+                    src={IconWarning}
+                    style={styles.insecureRoomNameWarningIcon}
+                />
+                <Text style={styles.insecureRoomNameWarningText}>
+                    {this.props.t("security.insecureRoomNameWarning")}
                 </Text>
             </View>
         );
@@ -150,8 +153,8 @@ class WelcomePage extends AbstractWelcomePage {
             styles.messageContainer,
             styles.hintContainer,
             {
-                opacity: this.state.hintBoxAnimation
-            }
+                opacity: this.state.hintBoxAnimation,
+            },
         ];
     }
 
@@ -164,23 +167,22 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     _onFieldFocusChange(focused) {
-        focused
-            && this.setState({
-                _fieldFocused: true
+        focused &&
+            this.setState({
+                _fieldFocused: true,
             });
 
-        Animated.timing(
-            this.state.hintBoxAnimation,
-            {
-                duration: 300,
-                toValue: focused ? 1 : 0
-            })
-            .start(animationState =>
-                animationState.finished
-                    && !focused
-                    && this.setState({
-                        _fieldFocused: false
-                    }));
+        Animated.timing(this.state.hintBoxAnimation, {
+            duration: 300,
+            toValue: focused ? 1 : 0,
+        }).start(
+            (animationState) =>
+                animationState.finished &&
+                !focused &&
+                this.setState({
+                    _fieldFocused: false,
+                })
+        );
     }
 
     /**
@@ -205,14 +207,14 @@ class WelcomePage extends AbstractWelcomePage {
             const { t } = this.props;
 
             return (
-                <Animated.View style = { this._getHintBoxStyle() }>
-                    <View style = { styles.hintTextContainer } >
-                        <Text style = { styles.hintText }>
-                            { t('welcomepage.roomnameHint') }
+                <Animated.View style={this._getHintBoxStyle()}>
+                    <View style={styles.hintTextContainer}>
+                        <Text style={styles.hintText}>
+                            {t("welcomepage.roomnameHint")}
                         </Text>
                     </View>
-                    <View style = { styles.hintButtonContainer } >
-                        { this._renderJoinButton() }
+                    <View style={styles.hintButtonContainer}>
+                        {this._renderJoinButton()}
                     </View>
                 </Animated.View>
             );
@@ -231,7 +233,6 @@ class WelcomePage extends AbstractWelcomePage {
         const { t } = this.props;
         let children;
 
-
         if (this.state.joining) {
             // TouchableHighlight is picky about what its children can be, so
             // wrap it in a native component, i.e. View to avoid having to
@@ -239,26 +240,27 @@ class WelcomePage extends AbstractWelcomePage {
             children = (
                 <View>
                     <LoadingIndicator
-                        color = { styles.buttonText.color }
-                        size = 'small' />
+                        color={styles.buttonText.color}
+                        size="small"
+                    />
                 </View>
             );
         } else {
             children = (
-                <Text style = { styles.buttonText }>
-                    { this.props.t('welcomepage.join') }
+                <Text style={styles.buttonText}>
+                    {this.props.t("welcomepage.join")}
                 </Text>
             );
         }
 
         return (
             <TouchableHighlight
-                accessibilityLabel =
-                    { t('welcomepage.accessibilityLabel.join') }
-                onPress = { this._onJoin }
-                style = { styles.button }
-                underlayColor = { ColorPalette.white }>
-                { children }
+                accessibilityLabel={t("welcomepage.accessibilityLabel.join")}
+                onPress={this._onJoin}
+                style={styles.button}
+                underlayColor={ColorPalette.white}
+            >
+                {children}
             </TouchableHighlight>
         );
     }
@@ -269,53 +271,51 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {ReactElement}
      */
     _renderFullUI() {
-        const roomnameAccLabel = 'welcomepage.accessibilityLabel.roomname';
+        const roomnameAccLabel = "welcomepage.accessibilityLabel.roomname";
         const { _headerStyles, t } = this.props;
 
         return (
-            <LocalVideoTrackUnderlay style = { styles.welcomePage }>
-                <View style = { _headerStyles.page }>
-                    <Header style = { styles.header }>
-                        <TouchableOpacity onPress = { this._onShowSideBar } >
+            <LocalVideoTrackUnderlay style={styles.welcomePage}>
+                <View style={_headerStyles.page}>
+                    <Header style={styles.header}>
+                        <TouchableOpacity onPress={this._onShowSideBar}>
                             <Icon
-                                src = { IconMenu }
-                                style = { _headerStyles.headerButtonIcon } />
+                                src={IconMenu}
+                                style={_headerStyles.headerButtonIcon}
+                            />
                         </TouchableOpacity>
                         <VideoSwitch />
                     </Header>
-                    <SafeAreaView style = { styles.roomContainer } >
-                        <View style = { styles.joinControls } >
-                            <Text style = { styles.enterRoomText }>
-                                { t('welcomepage.roomname') }
+                    <SafeAreaView style={styles.roomContainer}>
+                        <View style={styles.joinControls}>
+                            <Text style={styles.enterRoomText}>
+                                {t("welcomepage.roomname")}
                             </Text>
                             <TextInput
-                                accessibilityLabel = { t(roomnameAccLabel) }
-                                autoCapitalize = 'none'
-                                autoComplete = 'off'
-                                autoCorrect = { false }
-                                autoFocus = { false }
-                                onBlur = { this._onFieldBlur }
-                                onChangeText = { this._onRoomChange }
-                                onFocus = { this._onFieldFocus }
-                                onSubmitEditing = { this._onJoin }
-                                placeholder = { this.state.roomPlaceholder }
-                                placeholderTextColor = { PLACEHOLDER_TEXT_COLOR }
-                                returnKeyType = { 'go' }
-                                style = { styles.textInput }
-                                underlineColorAndroid = 'transparent'
-                                value = { this.state.room } />
-                            {
-                                this._renderInsecureRoomNameWarning()
-                            }
-                            {
-                                this._renderHintBox()
-                            }
+                                accessibilityLabel={t(roomnameAccLabel)}
+                                autoCapitalize="none"
+                                autoComplete="off"
+                                autoCorrect={false}
+                                autoFocus={false}
+                                onBlur={this._onFieldBlur}
+                                onChangeText={this._onRoomChange}
+                                onFocus={this._onFieldFocus}
+                                onSubmitEditing={this._onJoin}
+                                // placeholder = { this.state.roomPlaceholder }
+                                placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
+                                returnKeyType={"go"}
+                                style={styles.textInput}
+                                underlineColorAndroid="transparent"
+                                value={this.state.room}
+                            />
+                            {this._renderInsecureRoomNameWarning()}
+                            {this._renderHintBox()}
                         </View>
                     </SafeAreaView>
-                    <WelcomePageLists disabled = { this.state._fieldFocused } />
+                    <WelcomePageLists disabled={this.state._fieldFocused} />
                 </View>
                 <WelcomePageSideBar />
-                { this._renderWelcomePageModals() }
+                {this._renderWelcomePageModals()}
             </LocalVideoTrackUnderlay>
         );
     }
@@ -329,9 +329,9 @@ class WelcomePage extends AbstractWelcomePage {
         const { t } = this.props;
 
         return (
-            <View style = { styles.reducedUIContainer }>
-                <Text style = { styles.reducedUIText }>
-                    { t('welcomepage.reducedUIText', { app: getName() }) }
+            <View style={styles.reducedUIContainer}>
+                <Text style={styles.reducedUIText}>
+                    {t("welcomepage.reducedUIText", { app: getName() })}
                 </Text>
             </View>
         );
@@ -344,9 +344,9 @@ class WelcomePage extends AbstractWelcomePage {
      */
     _renderWelcomePageModals() {
         return [
-            <HelpView key = 'helpView' />,
-            <DialInSummary key = 'dialInSummary' />,
-            <SettingsView key = 'settings' />
+            <HelpView key="helpView" />,
+            <DialInSummary key="dialInSummary" />,
+            <SettingsView key="settings" />,
         ];
     }
 }
@@ -360,7 +360,7 @@ class WelcomePage extends AbstractWelcomePage {
 function _mapStateToProps(state) {
     return {
         ..._abstractMapStateToProps(state),
-        _headerStyles: ColorSchemeRegistry.get(state, 'Header')
+        _headerStyles: ColorSchemeRegistry.get(state, "Header"),
 
         // _reducedUI: state['features/base/responsive-ui'].reducedUI
     };

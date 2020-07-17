@@ -1,17 +1,17 @@
 // @flow
 
-import React from 'react';
-import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+import React from "react";
+import { Text, View, TouchableOpacity, TextInput } from "react-native";
 
-import { Avatar } from '../../../base/avatar';
-import { CustomDialog } from '../../../base/dialog';
-import { translate } from '../../../base/i18n';
-import { Icon, IconEdit } from '../../../base/icons';
-import { LoadingIndicator } from '../../../base/react';
-import { connect } from '../../../base/redux';
-import AbstractLobbyScreen, { _mapStateToProps } from '../AbstractLobbyScreen';
+import { Avatar } from "../../../base/avatar";
+import { CustomDialog } from "../../../base/dialog";
+import { translate } from "../../../base/i18n";
+import { Icon, IconEdit } from "../../../base/icons";
+import { LoadingIndicator } from "../../../base/react";
+import { connect } from "../../../base/redux";
+import AbstractLobbyScreen, { _mapStateToProps } from "../AbstractLobbyScreen";
 
-import styles from './styles';
+import styles from "./styles";
 
 /**
  * Implements a waiting screen that represents the participant being in the lobby.
@@ -27,15 +27,14 @@ class LobbyScreen extends AbstractLobbyScreen {
 
         return (
             <CustomDialog
-                onCancel = { this._onCancel }
-                style = { styles.contentWrapper }>
-                <Text style = { styles.dialogTitle }>
-                    { t(this._getScreenTitleKey()) }
+                onCancel={this._onCancel}
+                style={styles.contentWrapper}
+            >
+                <Text style={styles.dialogTitle}>
+                    {t(this._getScreenTitleKey())}
                 </Text>
-                <Text style = { styles.secondaryText }>
-                    { _meetingName }
-                </Text>
-                { this._renderContent() }
+                <Text style={styles.secondaryText}>{_meetingName}</Text>
+                {this._renderContent()}
             </CustomDialog>
         );
     }
@@ -46,11 +45,11 @@ class LobbyScreen extends AbstractLobbyScreen {
 
     _onCancel: () => boolean;
 
-    _onChangeDisplayName: Object => void;
+    _onChangeDisplayName: (Object) => void;
 
-    _onChangeEmail: Object => void;
+    _onChangeEmail: (Object) => void;
 
-    _onChangePassword: Object => void;
+    _onChangePassword: (Object) => void;
 
     _onEnableEdit: () => void;
 
@@ -71,12 +70,13 @@ class LobbyScreen extends AbstractLobbyScreen {
         return (
             <>
                 <LoadingIndicator
-                    color = 'black'
-                    style = { styles.loadingIndicator } />
-                <Text style = { styles.joiningMessage }>
-                    { this.props.t('lobby.joiningMessage') }
+                    color="black"
+                    style={styles.loadingIndicator}
+                />
+                <Text style={styles.joiningMessage}>
+                    {this.props.t("lobby.joiningMessage")}
                 </Text>
-                { this._renderStandardButtons() }
+                {this._renderStandardButtons()}
             </>
         );
     }
@@ -91,21 +91,19 @@ class LobbyScreen extends AbstractLobbyScreen {
         const { displayName, email } = this.state;
 
         return (
-            <View style = { styles.formWrapper }>
-                <Text style = { styles.fieldLabel }>
-                    { t('lobby.nameField') }
-                </Text>
+            <View style={styles.formWrapper}>
+                <Text style={styles.fieldLabel}>{t("lobby.nameField")}</Text>
                 <TextInput
-                    onChangeText = { this._onChangeDisplayName }
-                    style = { styles.field }
-                    value = { displayName } />
-                <Text style = { styles.fieldLabel }>
-                    { t('lobby.emailField') }
-                </Text>
+                    onChangeText={this._onChangeDisplayName}
+                    style={styles.field}
+                    value={displayName}
+                />
+                <Text style={styles.fieldLabel}>{t("lobby.emailField")}</Text>
                 <TextInput
-                    onChangeText = { this._onChangeEmail }
-                    style = { styles.field }
-                    value = { email } />
+                    onChangeText={this._onChangeEmail}
+                    style={styles.field}
+                    value={email}
+                />
             </View>
         );
     }
@@ -119,23 +117,18 @@ class LobbyScreen extends AbstractLobbyScreen {
         const { displayName, email } = this.state;
 
         return (
-            <View style = { styles.participantBox }>
+            <View style={styles.participantBox}>
                 <TouchableOpacity
-                    onPress = { this._onEnableEdit }
-                    style = { styles.editButton }>
-                    <Icon
-                        src = { IconEdit }
-                        style = { styles.editIcon } />
+                    onPress={this._onEnableEdit}
+                    style={styles.editButton}
+                >
+                    <Icon src={IconEdit} style={styles.editIcon} />
                 </TouchableOpacity>
-                <Avatar
-                    participantId = { this.props._participantId }
-                    size = { 64 } />
-                <Text style = { styles.displayNameText }>
-                    { displayName }
-                </Text>
-                { Boolean(email) && <Text style = { styles.secondaryText }>
-                    { email }
-                </Text> }
+                <Avatar participantId={this.props._participantId} size={64} />
+                <Text style={styles.displayNameText}>{displayName}</Text>
+                {Boolean(email) && (
+                    <Text style={styles.secondaryText}>{email}</Text>
+                )}
             </View>
         );
     }
@@ -149,20 +142,23 @@ class LobbyScreen extends AbstractLobbyScreen {
         const { _passwordJoinFailed, t } = this.props;
 
         return (
-            <View style = { styles.formWrapper }>
-                <Text style = { styles.fieldLabel }>
-                    { this.props.t('lobby.passwordField') }
+            <View style={styles.formWrapper}>
+                <Text style={styles.fieldLabel}>
+                    {this.props.t("lobby.passwordField")}
                 </Text>
                 <TextInput
-                    autoCapitalize = 'none'
-                    autoCompleteType = 'off'
-                    onChangeText = { this._onChangePassword }
-                    secureTextEntry = { true }
-                    style = { styles.field }
-                    value = { this.state.password } />
-                { _passwordJoinFailed && <Text style = { styles.fieldError }>
-                    { t('lobby.invalidPassword') }
-                </Text> }
+                    autoCapitalize="none"
+                    autoCompleteType="off"
+                    onChangeText={this._onChangePassword}
+                    secureTextEntry={true}
+                    style={styles.field}
+                    value={this.state.password}
+                />
+                {_passwordJoinFailed && (
+                    <Text style={styles.fieldError}>
+                        {t("lobby.invalidPassword")}
+                    </Text>
+                )}
             </View>
         );
     }
@@ -178,25 +174,19 @@ class LobbyScreen extends AbstractLobbyScreen {
         return (
             <>
                 <TouchableOpacity
-                    disabled = { !this.state.password }
-                    onPress = { this._onJoinWithPassword }
-                    style = { [
-                        styles.button,
-                        styles.primaryButton
-                    ] }>
-                    <Text style = { styles.primaryButtonText }>
-                        { t('lobby.passwordJoinButton') }
+                    disabled={!this.state.password}
+                    onPress={this._onJoinWithPassword}
+                    style={[styles.button, styles.primaryButton]}
+                >
+                    <Text style={styles.primaryButtonText}>
+                        {t("lobby.passwordJoinButton")}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress = { this._onSwitchToKnockMode }
-                    style = { [
-                        styles.button,
-                        styles.secondaryButton
-                    ] }>
-                    <Text>
-                        { t('lobby.backToKnockModeButton') }
-                    </Text>
+                    onPress={this._onSwitchToKnockMode}
+                    style={[styles.button, styles.secondaryButton]}
+                >
+                    <Text>{t("lobby.backToKnockModeButton")}</Text>
                 </TouchableOpacity>
             </>
         );
@@ -212,26 +202,22 @@ class LobbyScreen extends AbstractLobbyScreen {
 
         return (
             <>
-                { _knocking || <TouchableOpacity
-                    disabled = { !this.state.displayName }
-                    onPress = { this._onAskToJoin }
-                    style = { [
-                        styles.button,
-                        styles.primaryButton
-                    ] }>
-                    <Text style = { styles.primaryButtonText }>
-                        { t('lobby.knockButton') }
-                    </Text>
-                </TouchableOpacity> }
+                {_knocking || (
+                    <TouchableOpacity
+                        disabled={!this.state.displayName}
+                        onPress={this._onAskToJoin}
+                        style={[styles.button, styles.primaryButton]}
+                    >
+                        <Text style={styles.primaryButtonText}>
+                            {t("lobby.knockButton")}
+                        </Text>
+                    </TouchableOpacity>
+                )}
                 <TouchableOpacity
-                    onPress = { this._onSwitchToPasswordMode }
-                    style = { [
-                        styles.button,
-                        styles.secondaryButton
-                    ] }>
-                    <Text>
-                        { t('lobby.enterPasswordButton') }
-                    </Text>
+                    onPress={this._onSwitchToPasswordMode}
+                    style={[styles.button, styles.secondaryButton]}
+                >
+                    <Text>{t("lobby.enterPasswordButton")}</Text>
                 </TouchableOpacity>
             </>
         );
